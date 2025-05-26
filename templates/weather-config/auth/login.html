@@ -1,0 +1,36 @@
+{% extends "weather-config/base/base.html" %}
+
+{% block title %}
+    Вход в систему
+{% endblock %}
+
+{% block content %}
+    <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-bold mb-4">Вход в систему</h1>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Имя пользователя</span>
+                </label>
+                <input type="text" name="username" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Пароль</span>
+                </label>
+                <input type="password" name="password" class="input input-bordered" required>
+            </div>
+
+            {% if form.errors %}
+                <div class="alert alert-error shadow-lg">
+                    <span>❌ Неверное имя пользователя или пароль.</span>
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary w-full">Войти</button>
+        </form>
+    </div>
+{% endblock %}

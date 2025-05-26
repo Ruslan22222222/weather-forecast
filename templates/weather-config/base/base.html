@@ -1,0 +1,39 @@
+{% load  static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}
+    {% endblock %}</title>
+
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- DaisyUI  -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.css" rel="stylesheet" type="text/css"/>
+
+    <!-- HTMX CDN -->
+    <script src="https://unpkg.com/htmx.org@2.0.4"
+            integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+            crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-[#1d232a] text-white p-4">
+<div class="max-w-4xl mx-auto">
+    <div class="flex justify-end mb-4">
+        {% if user.is_authenticated %}
+            <span class="mr-4">Привет, {{ user.username }}!</span>
+            <form method="post" action="{% url 'logout' %}" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline btn-sm">Выйти</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline btn-sm">Войти</a>
+        {% endif %}
+    </div>
+
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>

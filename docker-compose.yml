@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=postgres://weather_user:weather_password@db:5432/weather_db
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=weather_db
+      - POSTGRES_USER=weather_user
+      - POSTGRES_PASSWORD=weather_password
+
+volumes:
+  postgres_data:

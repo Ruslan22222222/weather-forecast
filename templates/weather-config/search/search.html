@@ -1,0 +1,40 @@
+{% extends "weather-config/base/base.html" %}
+{% load static %}
+
+{% block title %}
+    Прогноз погоды
+{% endblock %}
+
+{% block content %}
+    <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-bold mb-4">Прогноз погоды ☀️</h1>
+
+        <form method="post"
+              hx-post="{% url 'weather:search' %}"
+              hx-target="#forecast"
+              hx-swap="innerHTML"
+              class="space-y-2">
+            {% csrf_token %}
+            <input
+                    type="text"
+                    name="city"
+                    placeholder="Введите город"
+                    class="input input-bordered w-full"
+                    required
+                    hx-get="{% url 'weather:autocomplete' %}"
+                    hx-trigger="keyup changed delay:50ms"
+                    hx-target="#suggestions"
+                    hx-swap="innerHTML"
+            />
+
+            <ul id="suggestions" class="menu bg-base-100 rounded-box mt-1 shadow"
+                style="position:absolute; z-index:50;"></ul>
+            <button type="submit" class="btn btn-primary w-full">Узнать погоду</button>
+        </form>
+
+        <!-- Вот сюда подгружаем даные о погоде -->
+        <div id="forecast" class="mt-6">
+
+        </div>
+    </div>
+{% endblock %}

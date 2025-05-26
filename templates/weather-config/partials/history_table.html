@@ -1,0 +1,47 @@
+<div>
+    <table class="table w-full">
+        <thead>
+        <tr>
+            <th>Город</th>
+            <th>Количество запросов</th>
+            <th>Последний запрос</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in history %}
+            <tr>
+                <td>{{ item.city }}</td>
+                <td>{{ item.count }}</td>
+                <td>{{ item.last_search|date:"d.m.Y H:i" }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3" class="text-center text-error">История пуста</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_paginated %}
+        <div class="join justify-center mt-4">
+            {% for page_num in paginator.page_range %}
+                {% if page_num == page_obj.number %}
+                    <button hx-get="{% url 'weather:history' %}?page={{ page_num }}"
+                            hx-target="#history-content"
+                            hx-swap="innerHTML"
+                            class="join-item btn btn-square btn-primary">
+                        {{ page_num }}
+                    </button>
+                {% else %}
+                    <button hx-get="{% url 'weather:history' %}?page={{ page_num }}"
+                            hx-target="#history-content"
+                            hx-swap="innerHTML"
+                            class="join-item btn btn-square">
+                        {{ page_num }}
+                    </button>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>

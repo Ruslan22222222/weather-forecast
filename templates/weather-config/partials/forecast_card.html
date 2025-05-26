@@ -1,0 +1,43 @@
+{% load static %}
+<div class="max-w-md mx-auto mt-6">
+    <div class="card bg-base-100 image-full w-full shadow-sm">
+        <figure>
+            <img
+                    src="{% static 'imgs/nature.jpg' %}"
+                    alt="Weather Background"/>
+        </figure>
+        <div class="card-body">
+            <h2 class="card-title">{{ city }}</h2>
+            <p>
+                Температура: {{ temperature }}°C
+                <br>
+                Погода: {{ weather_description }}
+            </p>
+
+
+            <button onclick="history_modal.showModal()" class="btn btn-outline">
+                История Поиска
+            </button>
+            
+            <dialog id="history_modal" class="modal">
+                <div class="modal-box w-full max-w-2xl">
+                    <h3 class="font-bold text-lg mb-4">История поиска</h3>
+                    
+                    <div id="history-content"
+                         class="overflow-x-auto"
+                         hx-get="{% url 'weather:history' %}"
+                         hx-trigger="load"
+                         hx-swap="innerHTML">
+                    </div>
+
+                    <div class="modal-action">
+                        <form method="dialog">
+                            <button class="btn">Закрыть</button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
+
+        </div>
+    </div>
+</div>
