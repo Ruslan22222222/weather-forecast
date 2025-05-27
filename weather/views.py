@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import requests
 from django.views import View
 from django.http import JsonResponse
@@ -46,8 +48,9 @@ class WeatherView(View):
         weather_params = {
             "latitude": lat,
             "longitude": lon,
-            "current_weather": True,
-            "timezone": "auto"
+            "daily": ["temperature_2m_max", "temperature_2m_min", "windspeed_10m_max"],
+            "timezone": "auto",
+            "forecast_days": 3
         }
 
         history_entry, created = SearchHistory.objects.get_or_create(
@@ -61,12 +64,19 @@ class WeatherView(View):
         history_entry.save()
 
         weather_response = requests.get(weather_url, params=weather_params).json()
-        current_weather = weather_response.get("current_weather", {})
+        daily_weather = weather_response.get("daily", {})
 
         context = {
             "city": city_name,
-            "temperature": current_weather.get("temperature"),
-            "weather_description": f"{current_weather.get('temperature')}°C, ветер {current_weather.get('windspeed')} км/ч",
+            "forecast": [
+                {
+                    "date": datetime.strptime(daily_weather["time"][i], "%Y-%m-%d"),
+                    "temp_max": daily_weather["temperature_2m_max"][i],
+                    "temp_min": daily_weather["temperature_2m_min"][i],
+                    "wind_speed": daily_weather["windspeed_10m_max"][i],
+                }
+                for i in range(3)
+            ]
         }
 
         return render(request, "weather-config/partials/forecast_card.html", context)
