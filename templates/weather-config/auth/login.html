@@ -1,4 +1,6 @@
 {% extends "weather-config/base/base.html" %}
+{% load static %}
+{% load socialaccount %}
 
 {% block title %}
     Вход в систему
@@ -30,7 +32,14 @@
                 </div>
             {% endif %}
 
-            <button type="submit" class="btn btn-primary w-full">Войти</button>
+            <button type="submit" class="btn btn-primary w-full mb-2">Войти</button>
+
+            <a href="{% provider_login_url 'google' %}" class="btn btn-success w-full flex items-center justify-center">
+                <img class="w-5 h-5 mr-2" alt="" src="{% static 'imgs/google-mini.svg' %}">
+                Войти через Google
+            </a>
+
+
         </form>
     </div>
 {% endblock %}
